@@ -1,0 +1,50 @@
+## Yan Shtunder
+## 10/07/2018
+
+ 
+##########################
+#     Setup settings     #
+##########################
+
+autoload=no
+serverip=10.10.70.101
+ipaddr=10.10.10.103
+bootdelay=5
+uenvcmd=echo "Running uenvcmd ...";
+tftpcmd="tftpboot"
+
+
+##########################
+# Loading bitstream file #
+##########################
+
+bit_loadaddr=0x100000
+bit_file=fpga.bin
+
+bootcmd_bitstream_tftp=if echo " "; echo "=== Boot Bitstream from TFTP ==="; tftpboot ${bit_loadaddr} ${serverip}:${bit_file}; then fpga load 0 ${bit_loadaddr} ${filesize}; tftp_bitstream=true; else tftp_bitstream=false; echo "===> TFTP deny or file not found"; fi
+
+
+bootcmd_bitstream_sd=echo " "; echo "=== Boot Bitstream from SD ==="; load mmc 0 ${bit_loadaddr} ${bit_file}; fpga load 0 ${bit_loadaddr} ${filesize};
+
+
+
+##########################
+#    Loading ELF files   #
+##########################
+
+elf_loadaddr=0xA400000
+elf_file=lwip_proj.elf
+
+bootcmd_elf_tftp=echo " "; echo "=== Boot ELF from TFTP ==="; tftpboot ${elf_loadaddr} ${serverip}:${elf_file}; bootelf ${elf_loadaddr} ${elf_file};
+
+
+bootcmd_elf_sd=echo " "; echo "=== Boot ELF from SD ==="; load mmc 0 ${elf_loadaddr} ${elf_file}; bootelf ${elf_loadaddr} ${elf_file};
+
+
+
+##########################
+#           RUN          #
+##########################
+
+bootcmd=run bootcmd_bitstream_tftp; if "${tftp_bitstream}" == "true"; then echo "===> Bitstream has load in RAM due to TFTP"; run bootcmd_elf_tftp; else run bootcmd_bitstream_sd; echo "===> Bitstream has load in RAM due to SD"; run bootcmd_elf_sd; fi
+

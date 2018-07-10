@@ -1,0 +1,6 @@
+//arch = zynq; split = false; format = BIN
+the_ROM_image:
+{
+	[bootloader]/home/yan/Xilinx/current/project_1.sdk/FSBL_1/Debug/FSBL_1.elf
+	/home/yan/git/linux_zedboard/my_board/boot_files/3/u-boot.elf
+}
