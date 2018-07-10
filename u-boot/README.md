@@ -24,12 +24,12 @@ uEnv.txt        | файл uEnv.txt — это способ вставлять �
 
 1. BOOT.bin
 2. fpga.bin
-3. u-boot.elf
+3. lwip_proj.elf
 4. uEnv.txt
 ***
 В папку TFTP сервера скидывеам следующие файлы:
 
 1. fpga.bin
-2. u-boot.elf
+2. lwip_proj.elf
 
 
